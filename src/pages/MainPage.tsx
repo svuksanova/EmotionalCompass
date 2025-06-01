@@ -1,9 +1,9 @@
-import Login from '../components/Login.tsx'
+import Main from '../components/Main.tsx'
 
-export default function LoginPage() {
+export default function MainPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-50">
-            <Login />
+            <Main />
         </div>
     );
 }

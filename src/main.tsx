@@ -5,6 +5,7 @@ import './css/Index.css';
 
 import LoginPage   from './pages/LoginPage';
 import ChatPage from './pages/ChatPage.tsx';
+import MainPage from './pages/MainPage.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
                 {/* public */}
                 <Route path="/login"  element={<LoginPage />} />
                 <Route path="/chat"   element={<ChatPage/>}/>
+                <Route path="/index"  element={<MainPage/>}/>
             </Routes>
         </BrowserRouter>
     </StrictMode>,
