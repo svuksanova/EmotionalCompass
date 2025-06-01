@@ -6,10 +6,110 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+/// ---------- USER ----------
+model User {
+  id           String    @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String    @unique
+  passwordHash String
+  dateBirth    DateTime?
+  dateCreated  DateTime  @default(now())
+
+  moodEntries  MoodEntry[]
+  chatSessions ChatSession[]
+}
+
+/// ---------- MOOD ----------
+model MoodEntry {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  scale     Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+/// ---------- CHAT ----------
+model ChatSession {
+  id        String        @id @default(uuid())
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String
+  startedAt DateTime      @default(now())
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+
+  sender    MessageRole
+  content   String
+  createdAt DateTime    @default(now())
+
+  // system-asked question
+  question   Question? @relation("AskedQuestion", fields: [questionId], references: [id])
+  questionId String?
+
+  // user-selected choice
+  selectedChoice Choice? @relation(fields: [choiceId], references: [id])
+  choiceId       String?
+}
+
+enum MessageRole {
+  SYSTEM
+  USER
+}
+
+/// ---------- QUESTION FLOW ----------
+model Question {
+  id          String @id @default(uuid())
+  prompt      String
+  forScale Int
+
+  // 1) choices that BELONG to this question
+  choices Choice[] @relation("QuestionChoices")
+
+  // 2) choices that POINT to this question as their NEXT step
+  asNextChoice Choice[] @relation("NextQuestion")
+
+  // 3) chat messages where this question was asked
+  chatMessages ChatMessage[] @relation("AskedQuestion")
+}
+
+model Choice {
+  id String @id @default(uuid())
+
+  // parent question
+  question   Question @relation("QuestionChoices", fields: [questionId], references: [id])
+  questionId String
+
+  label String
+
+  // pointer to the next question (optional)
+  nextQuestion   Question? @relation("NextQuestion", fields: [nextQuestionId], references: [id])
+  nextQuestionId String?
+
+  suggestion   Suggestion?   @relation(fields: [suggestionId], references: [id])
+  suggestionId String?
+  ChatMessage  ChatMessage[]
+}
+
+/// ---------- SUGGESTIONS ----------
+model Suggestion {
+  id      String   @id @default(uuid())
+  title   String
+  url     String?
+  content String?
+  Choice  Choice[]
 }
