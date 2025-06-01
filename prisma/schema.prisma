@@ -20,7 +20,6 @@ model User {
   lastName     String
   email        String    @unique
   passwordHash String
-  dateBirth    DateTime?
   dateCreated  DateTime  @default(now())
 
   moodEntries  MoodEntry[]
