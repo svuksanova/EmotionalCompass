@@ -157,6 +157,11 @@ app.get('/api/chat/:sessionId', requireAuth, async (req: AuthReq, res) => {
     res.json(messages);
 });
 
+//POST /api/auth/logout - Log out the user
+app.post("/api/auth/logout", requireAuth, async (_req, res) => {
+    return res.json({ ok: true, message: "Logged out" });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`));
 
