@@ -1,12 +1,19 @@
+.animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
 .index-container {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #d9d3b3;
+  background-color: #e0f7ff;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   font-family: monospace;
 }
 
@@ -15,16 +22,16 @@
   font-size: 1.2rem;
   border-radius: 12px;
   border: 1px solid #838080;
-  background-color: #d9d3b3;
+  background-color: rgba(255, 255, 255, 0.8);
   color: #3f3f3f;
   cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   transition: background 0.3s;
 }
 
 .start-button:hover {
-  background-color: #d5c68f;
+  background-color: #93d3ea;
 }
 
 .floating-word {
@@ -33,9 +40,9 @@
   color: #444;
   opacity: 0;
   animation: fadeInOut ease-in-out forwards;
-  animation-duration: 6s; /* ← slower fade-out */
+  animation-duration: 6s;
+  z-index: 1;
 }
-
 
 @keyframes fadeInOut {
   0%   { opacity: 0; transform: scale(0.8); }
@@ -44,3 +51,8 @@
   100% { opacity: 0; transform: scale(1.1); }
 }
 
+.navbar-left {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
