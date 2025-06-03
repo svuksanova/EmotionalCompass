@@ -1,4 +1,3 @@
-// File: components/AuthForm.jsx
 import { useState } from "react";
 import "../css/Login.css";
 
