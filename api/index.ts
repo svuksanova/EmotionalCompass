@@ -162,6 +162,22 @@ app.post("/api/auth/logout", requireAuth, async (_req, res) => {
     return res.json({ ok: true, message: "Logged out" });
 });
 
+// GET /api/auth/me  → returns { firstName, lastName, email, id }
+app.get('/api/auth/me', requireAuth, async (req: AuthReq, res) => {
+    // requireAuth has already verified the JWT and set req.userId
+    const user = await prisma.user.findUnique({ where: { id: req.userId! } });
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    // Only send back the fields we need on the frontend
+    return res.json({
+        id:        user.id,
+        firstName: user.firstName,
+        lastName:  user.lastName,
+        email:     user.email,
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`));
 

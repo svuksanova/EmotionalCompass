@@ -57,7 +57,7 @@ export default function AuthForm() {
 
             const { token } = await res.json();
             localStorage.setItem("token", token);
-            nav("/index", { replace: true });
+            nav("/", { replace: true });
         } catch (err) {
             setError(err.message ?? "Something went wrong");
         } finally {
