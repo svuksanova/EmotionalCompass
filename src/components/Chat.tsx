@@ -1,8 +1,7 @@
-// ── src/pages/ChatPage.tsx ──
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import "../css/Chat.css";
-import { logout } from "../lib/auth"; // make sure this points to your helper
+import { logout } from "../lib/auth";
 
 interface Choice   { id: string; label: string }
 interface Question { id: string; prompt: string; choices: Choice[] }
@@ -11,29 +10,26 @@ interface Message  { from: "user" | "bot"; text: string }
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 export default function ChatPage() {
-    // ── 1) Route-guard: if no token, redirect to /login ──
+
     const token = localStorage.getItem("token");
     if (!token) {
         return <Navigate to="/login" replace />;
     }
 
-    // ── 2) Local state ──
     const [sessionId, setSessionId]     = useState<string | null>(null);
     const [currentQ, setCurrentQ]       = useState<Question | null>(null);
     const [chat, setChat]               = useState<Message[]>([]);
-    const [firstName, setFirstName]     = useState<string>(""); // ← store real first name
+    const [firstName, setFirstName]     = useState<string>("");
     const [closingMessage, setClosingMessage] = useState<string | null>(null);
     const [suggestions, setSuggestions]     = useState<string[]>([]);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const nav = useNavigate();
 
-    // Always send the latest token in our headers:
     const authHeaders = {
         "Content-Type": "application/json",
         Authorization : `Bearer ${token}`,
     };
 
-    // ── 3) Fetch “who am I?” on mount ──
     useEffect(() => {
         async function fetchMe() {
             try {
@@ -45,18 +41,14 @@ export default function ChatPage() {
                     throw new Error("Failed to fetch user profile");
                 }
                 const data = (await res.json()) as { firstName: string };
-                setFirstName(data.firstName); // now we know their name
+                setFirstName(data.firstName);
             } catch (err) {
                 console.error("Could not load /api/auth/me:", err);
-                // If you want to force-logout on 401, you could do:
-                // localStorage.removeItem("token");
-                // nav("/login", { replace: true });
             }
         }
         fetchMe();
-    }, []); // run once on mount
+    }, []);
 
-    // ── 4) “Start chat” helper ──
     const startChat = useCallback(async () => {
         try {
             const r = await fetch(`${API}/api/chat/start`, {
@@ -76,12 +68,11 @@ export default function ChatPage() {
             console.error(err);
             setChat([{ from: "bot", text: "Could not start the chat. 🛑" }]);
         }
-    }, []); // no dependencies other than authHeaders/string constants
+    }, []);
 
     const sendChoice = async (choice: Choice) => {
         if (!sessionId) return;
 
-        // 1) Immediately show the user’s selection
         setChat((c) => [...c, { from: "user", text: choice.label }]);
 
         try {
@@ -92,7 +83,6 @@ export default function ChatPage() {
             });
             if (!r.ok) throw new Error(await r.text());
 
-            // 2) The server returns either nextQuestion or (closingMessage  suggestions).
             const data = await r.json() as {
                 nextQuestion: Question | null;
                 closingMessage?: string;
@@ -104,7 +94,6 @@ export default function ChatPage() {
                 setChat((c) => [...c, { from: "bot", text: data.nextQuestion!.prompt }]);
                 setCurrentQ(data.nextQuestion);
             } else {
-                // Leaf node: show one closingMessage  each suggestion as a bot message
                 const msg = data.closingMessage || "Thank you for sharing!";
                 const tips = data.suggestions || [];
                         setChat((c) => {
@@ -125,28 +114,20 @@ export default function ChatPage() {
         }
     };
 
-    // ── 6) Kick off the conversation when component mounts ──
     useEffect(() => {
         startChat();
     }, [startChat]);
 
-    // ── 7) Auto-scroll when new chat arrives ──
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [chat]);
 
-    // ── 8) Render UI ──
-    //    • Show the fetched firstName in the navbar
-    //    • Render the “Log out” link as a plain <button> styled like text
     return (
         <div className="chat-wrapper">
-            {/* ─────────────── Navbar ─────────────── */}
             <div className="navbar">
                 <div className="navbar-left">Emotional Compass</div>
                 <div className="user-bar">
-                    {/* Show actual firstName (or fallback "User") */}
                     <span>Welcome {firstName || "User"}!</span>
-                    {/* Log out as a plain link (we’ll add CSS to make it look like one) */}
                     <button
                         className="logout-link"
                         onClick={() => logout(nav)}
@@ -156,7 +137,6 @@ export default function ChatPage() {
                 </div>
             </div>
 
-            {/* ─────────── Animated background ─────────── */}
             <svg
                 className="animated-bg"
                 width="100%"
@@ -263,7 +243,6 @@ export default function ChatPage() {
                 </circle>
             </svg>
 
-            {/* ─────────── Chat box ─────────── */}
             <div className="chat-box">
                 {chat.map((m, i) => (
                     <div key={i} className={`chat-message ${m.from}`}>
@@ -273,7 +252,6 @@ export default function ChatPage() {
                 <div ref={chatEndRef} />
             </div>
 
-            {/* ───────── Choice buttons ───────── */}
             {currentQ && (
                 <div className="popup-form">
                     <div className="popup-title">Choose a reply:</div>
