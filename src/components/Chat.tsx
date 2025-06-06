@@ -6,6 +6,8 @@ import { logout } from "../lib/auth";
 interface Choice   { id: string; label: string }
 interface Question { id: string; prompt: string; choices: Choice[] }
 interface Message  { from: "user" | "bot"; text: string }
+import ReactMarkdown from "react-markdown";
+
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -246,7 +248,13 @@ export default function ChatPage() {
             <div className="chat-box">
                 {chat.map((m, i) => (
                     <div key={i} className={`chat-message ${m.from}`}>
-                        {m.text}
+                        <ReactMarkdown
+                            components={{
+                                a: ({ node, ...props }) => (
+                                    <a {...props} target="_blank" rel="noopener noreferrer" />
+                                )
+                            }}
+                        >{m.text}</ReactMarkdown>
                     </div>
                 ))}
                 <div ref={chatEndRef} />

@@ -171,7 +171,7 @@ app.post('/api/chat/:sessionId/answer', requireAuth, async (req: AuthReq, res) =
                    "🧘‍♀️ Continue mindfulness: try a 5-minute breathing exercise.",
                    "🚶‍♂️ Keep moving: consider a short walk to maintain this energy.",
                    "📔 Reflect: write down what you did well in your journal.",
-                   "🎧 Listen to uplifting music: here’s a quick playlist: https://www.youtube.com/watch?v=uk-DSogtQRo",
+                   "🎧 Listen to uplifting music: here’s a quick playlist: <https://www.youtube.com/watch?v=uk-DSogtQRo>",
                  ];
            }
        else if (moodScale === 4) {
@@ -545,7 +545,7 @@ app.post('/api/chat/:sessionId/answer', requireAuth, async (req: AuthReq, res) =
                        "🚰 Drink a full glass of water and pause for a moment.",
                        "🗣️ If you can, share how you feel with a close friend or family member.",
                        "🛏️ Focus on a short rest or a quick nap if possible.",
-                       "💬 Look at these basic coping tips: https://example.com/2‐coping‐tips",
+                       "💬 Look at these basic coping tips: <https://blog.calm.com/blog/coping-strategies>",
                    ];
            }
        }
@@ -680,8 +680,8 @@ app.post('/api/chat/:sessionId/answer', requireAuth, async (req: AuthReq, res) =
                        "📞 Call a mental health hotline or a trusted family member.",
                        "🧸 Take 5 deep breaths: inhale for 4 counts, exhale for 4 counts.",
                        "📓 Jot down one hope you have for tomorrow—even if it’s small.",
-                       "💻 Watch a short guided relaxation video: https://example.com/1-relax",
-                       "💬 Here’s a list of local resources: https://example.com/1-help",
+                       "💻 Watch a short guided relaxation video: <https://www.youtube.com/watch?v=ztTexqGQ0VI>",
+                       "💬 Here’s a list of local resources: <https://www.who.int/news-room/feature-stories/mental-well-being-resources-for-the-public>",
                    ];
            }
        }
@@ -689,7 +689,7 @@ app.post('/api/chat/:sessionId/answer', requireAuth, async (req: AuthReq, res) =
              closingMessage = "I’m really sorry you feel this way. You’re not alone. Consider:";
              suggestions = [
                    "📞 If you ever think you might harm yourself, call emergency services immediately.",
-                   "☎️ National suicide hotline: 988 (US), or find your country’s number here: https://example.com/988‐intl",
+                   "☎️ National suicide hotline: 15-315 (MKD), or find other helplines in Macedonia: <https://www.therapyroute.com/article/suicide-hotlines-and-crisis-lines-in-macedonia>",
                    "🧘‍♂️ Try a 2-minute grounding exercise: stare at one object, list five qualities of it.",
                    "🤝 Reach out to a trusted person and say, “I need help right now.”",
                    "📝 Write one sentence about why you matter, then keep it somewhere visible.",
