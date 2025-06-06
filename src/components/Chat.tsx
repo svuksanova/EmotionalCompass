@@ -22,6 +22,8 @@ export default function ChatPage() {
     const [currentQ, setCurrentQ]       = useState<Question | null>(null);
     const [chat, setChat]               = useState<Message[]>([]);
     const [firstName, setFirstName]     = useState<string>(""); // ← store real first name
+    const [closingMessage, setClosingMessage] = useState<string | null>(null);
+    const [suggestions, setSuggestions]     = useState<string[]>([]);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const nav = useNavigate();
 
@@ -76,10 +78,10 @@ export default function ChatPage() {
         }
     }, []); // no dependencies other than authHeaders/string constants
 
-    // ── 5) Ask a question, then show next prompt ──
     const sendChoice = async (choice: Choice) => {
         if (!sessionId) return;
-        // show user’s selection immediately:
+
+        // 1) Immediately show the user’s selection
         setChat((c) => [...c, { from: "user", text: choice.label }]);
 
         try {
@@ -90,15 +92,32 @@ export default function ChatPage() {
             });
             if (!r.ok) throw new Error(await r.text());
 
-            const { nextQuestion } = (await r.json()) as {
+            // 2) The server returns either nextQuestion or (closingMessage  suggestions).
+            const data = await r.json() as {
                 nextQuestion: Question | null;
+                closingMessage?: string;
+                suggestions?: string[];
             };
-            if (nextQuestion) {
-                setChat((c) => [...c, { from: "bot", text: nextQuestion.prompt }]);
-                setCurrentQ(nextQuestion);
+
+            if (data.nextQuestion) {
+                // Still mid‐conversation: push the next prompt and update state
+                setChat((c) => [...c, { from: "bot", text: data.nextQuestion!.prompt }]);
+                setCurrentQ(data.nextQuestion);
             } else {
-                setChat((c) => [...c, { from: "bot", text: "Thanks for playing! 🎉" }]);
-                setCurrentQ(null);
+                // Leaf node: show one closingMessage  each suggestion as a bot message
+                const msg = data.closingMessage || "Thank you for sharing!";
+                const tips = data.suggestions || [];
+                        setChat((c) => {
+                              // Combine them all into one update so "msg" only appears once.
+                                  const updated = [
+                                    ...c,
+                                    { from: "bot", text: msg },
+                                    // Now append each tip in order:
+                                        ...tips.map((tip) => ({ from: "bot", text: tip })),
+                                  ];
+                              return updated;
+                            });
+                        setCurrentQ(null);
             }
         } catch (err) {
             console.error(err);
