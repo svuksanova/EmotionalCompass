@@ -9,7 +9,7 @@ interface Message  { from: "user" | "bot"; text: string }
 import ReactMarkdown from "react-markdown";
 
 
-const API = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const API = import.meta.env.DEV ? "http://localhost:3000" : "";
 
 export default function ChatPage() {
 
@@ -22,8 +22,8 @@ export default function ChatPage() {
     const [currentQ, setCurrentQ]       = useState<Question | null>(null);
     const [chat, setChat]               = useState<Message[]>([]);
     const [firstName, setFirstName]     = useState<string>("");
-    const [closingMessage, setClosingMessage] = useState<string | null>(null);
-    const [suggestions, setSuggestions]     = useState<string[]>([]);
+    // const [closingMessage, setClosingMessage] = useState<string | null>(null);
+    // const [suggestions, setSuggestions]     = useState<string[]>([]);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const nav = useNavigate();
 
@@ -98,13 +98,13 @@ export default function ChatPage() {
             } else {
                 const msg = data.closingMessage || "Thank you for sharing!";
                 const tips = data.suggestions || [];
-                        setChat((c) => {
+                        setChat((prev) => {
                               // Combine them all into one update so "msg" only appears once.
                                   const updated = [
-                                    ...c,
-                                    { from: "bot", text: msg },
+                                    ...prev,
+                                    { from: "bot" as const, text: msg },
                                     // Now append each tip in order:
-                                        ...tips.map((tip) => ({ from: "bot", text: tip })),
+                                        ...tips.map(tip => ({ from: "bot" as const, text: tip })),
                                   ];
                               return updated;
                             });

@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 import {PrismaClient} from "@prisma/client";
 import 'dotenv/config'
 import { requireAuth, AuthReq } from './lib/auth';
+import path from "node:path";
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET
@@ -14,6 +15,8 @@ const TOKEN_EXPIRES = process.env.TOKEN_EXPIRES
 const app = express();
 app.use(cors({ origin: process.env.ORIGIN || '*' }));
 app.use(express.json());
+
+
 
 app.get('/health', (_, res) => res.json({ ok: true }));
 
@@ -746,6 +749,10 @@ app.get('/api/auth/me', requireAuth, async (req: AuthReq, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API listening on http://localhost:${PORT}`));
+
+const staticDir = path.resolve("dist");
+app.use(express.static(staticDir));
+app.get(/.*/, (_, res) => res.sendFile(path.join(staticDir, "index.html")));
 
 
 export default serverless(app);

@@ -5,10 +5,18 @@ import "../css/Login.css";
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 export default function AuthForm() {
+    interface FormState {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        confirm: string;
+    }
+
     const [isRegistering, setIsRegistering] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<FormState>({
         firstName: "", lastName: "", email: "", password: "", confirm: "",
     });
 
@@ -19,9 +27,11 @@ export default function AuthForm() {
         setError("");
     };
 
-    const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
+    type Field = keyof FormState;
 
-    async function handleSubmit(e) {
+    const set = (k: Field) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
         setLoading(true);
@@ -59,7 +69,9 @@ export default function AuthForm() {
             localStorage.setItem("token", token);
             nav("/", { replace: true });
         } catch (err) {
-            setError(err.message ?? "Something went wrong");
+            if (err instanceof Error) {
+                setError(err.message ?? "Something went wrong");
+            }
         } finally {
             setLoading(false);
         }
