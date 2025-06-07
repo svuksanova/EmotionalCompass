@@ -1,54 +1,82 @@
-# React + TypeScript + Vite
+# EmotionalCompass
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A chatbot‑style web application that helps users track feelings, reflect on their day and receive curated tips for emotional well‑being.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨Features
 
-## Expanding the ESLint configuration
+| Area      | Details                                                   |
+| ----------- | ----------------------------------------------------------- |
+| ChatFlow   | Question/answer conversation that adapts to the user’s mood |
+| Auth       | JWT‑based login & register with hashed passwords (bcrypt)   |
+| Data       | PostgreSQL (Neon) managed via Prisma ORM                    |
+| TipsEngine | Server chooses closing messages & self‑care suggestions     |
+| Deployment | One‑click **Render** WebService (free tier)                |
+| UI          | Vite+ React18 + TypeScript                                |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🎬Quick Demo
+
+[▶️Watch a short demo](https://github.com/svuksanova/ThinkSafePlaySafe/blob/main/DemoVideo.mp4)
+
+---
+
+## 🏗️TechStack
+
+```text
+Frontend : React18 · Vite · TypeScript · React‑Router
+Backend : Express5 · tsx runtime · Prisma6 · Zod
+Database : PostgreSQL (Neon serverless + pooled URL)
+Infra : Render (monolithic Node web service)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔧LocalDevelopment
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+# 1. clone & install
+$ git clone https://github.com/<you>/EmotionalCompass.git
+$ cd EmotionalCompass
+$ npm ci
+
+# 2. create an `.env` file with the required secrets
+
+# 3. migrate + seed database (optional)
+$ npx prisma migrate deploy
+$ npm run seed                  # or npx prisma db seed
+
+# 4. launch both servers
+$ npm run backend # API on http://localhost:3000
+$ npm run dev # Vite on http://localhost:5173
 ```
+
+The front‑end proxy points API calls at **`http://localhost:3000`** during dev
+automatically.
+
+---
+
+---
+
+---
+
+## 🧩Scripts
+
+| Command         | What it does                                           |
+| --------------- | -------------------------------------------------------- |
+| `npm run dev`   | Launch Vite dev server (port5173)                       |
+| `npm run backend` | Run Express API via tsx watcher                          |
+| `npm run build` | `tsc -b && vite build` – compiles server & bundles React |
+| `npm run seed`  | Seeds example data via `prisma db seed`                  |
+| `npm run lint`  | ESLint check                                             |
+
+---
+
+## 👥ProjectTeam
+
+* Stefani Vuksanova
+* Vladislav Angelovski
+
+---
