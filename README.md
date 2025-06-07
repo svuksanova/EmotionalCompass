@@ -16,6 +16,11 @@ A chatbot‑style web application that helps users track feelings, reflect on th
 | UI          | Vite+ React18 + TypeScript                                |
 
 ---
+🌐Live Site
+
+https://emotional-compass.onrender.com
+
+---
 
 ## 🎬Quick Demo
 
