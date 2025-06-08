@@ -2,7 +2,6 @@
 
 A chatbot‑style web application that helps users track feelings, reflect on their day and receive curated tips for emotional well‑being.
 
----
 
 ## ✨Features
 
@@ -15,18 +14,14 @@ A chatbot‑style web application that helps users track feelings, reflect on th
 | Deployment | One‑click **Render** WebService (free tier)                |
 | UI          | Vite+ React18 + TypeScript                                |
 
----
+
 🌐Live Site
 
 https://emotional-compass.onrender.com
 
----
-
 ## 🎬Quick Demo
 
 [▶️Watch a short demo](https://github.com/svuksanova/ThinkSafePlaySafe/blob/main/DemoVideo.mp4)
-
----
 
 ## 🏗️TechStack
 
@@ -36,8 +31,6 @@ Backend : Express5 · tsx runtime · Prisma6 · Zod
 Database : PostgreSQL (Neon serverless + pooled URL)
 Infra : Render (monolithic Node web service)
 ```
-
----
 
 ## 🔧LocalDevelopment
 
@@ -61,11 +54,6 @@ $ npm run dev # Vite on http://localhost:5173
 The front‑end proxy points API calls at **`http://localhost:3000`** during dev
 automatically.
 
----
-
----
-
----
 
 ## 🧩Scripts
 
@@ -84,4 +72,3 @@ automatically.
 * Stefani Vuksanova
 * Vladislav Angelovski
 
----
